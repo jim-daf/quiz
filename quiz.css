@@ -103,11 +103,7 @@ body.wrong {
     background-color: rgb(52, 111, 167);
     transition: 0.3s; 
 }
-.btn:hover{
-    
-    transition: 0.3s;
-    cursor: pointer;
-}
+
 
 #question{
   display: flex;
