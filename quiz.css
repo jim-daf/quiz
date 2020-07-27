@@ -60,9 +60,6 @@ body.wrong {
   outline: none;
 }
 
-.btn:hover {
-  border-color: black;
-}
 
 
 .btn.correct{
