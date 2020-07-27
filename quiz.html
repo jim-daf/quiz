@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="/quiz/quiz.css" rel="stylesheet">
+    <link href="/quiz/styles.css" rel="stylesheet">
+    
+    <title>ΕΞΕΤΑΣΗ</title>
+</head>
+
+
+    <body>
+        
+        
+        
+        <div class="container">
+        
+            <div id="question-container" class="hide">
+                
+                <div id="question">Question</div>
+                <div id="answer-buttons" class="btn-grid">
+                    <button class="btn" id="1">Answer 1</button>
+                    <button class="btn" id="2">Answer 2</button>
+                    <button class="btn" id="3">Answer 3</button>
+                    <button class="btn" id="4">Answer 4</button>
+                </div>
+            </div>
+            
+            
+            
+            <div class="controls">
+
+                <button id="start-btn" class="start-btn btn" name="start-btn">ΞΕΚΙΝΑ ΤΟ ΚΟΥΙΖ</button>
+                <button id="next-btn" class="next-btn btn hide" name="next-btn">ΕΠΟΜΕΝΟ</button>
+                
+                
+                    
+                <button data-modal-target="#modal" class="submit-btn btn hide" id="submit-btn" name="submit-btn"
+                    onclick="submit()">ΥΠΟΒΟΛΗ</button>
+                <div class="modal" id="modal">
+                    <div class="modal-header">
+                        <div class="title">Το σκορ σου είναι:</div>
+                        <button data-close-button class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" id="corrects"> <p id="synolo">/4</p>
+                        <button id="goback" onclick="epistrofi()">ΕΠΙΣΤΡΟΦΗ</button>
+                    </div>
+                </div>
+                <div id="overlay"></div>
+            </div>
+        
+        </div>
+        <script>
+            const openModalButtons = document.querySelectorAll('[data-modal-target]')
+            const closeModalButtons = document.querySelectorAll('[data-close-button]')
+            const overlay = document.getElementById('overlay')
+
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = document.querySelector(button.dataset.modalTarget)
+                    openModal(modal)
+                })
+            })
+
+            overlay.addEventListener('click', () => {
+                const modals = document.querySelectorAll('.modal.active')
+                modals.forEach(modal => {
+                    closeModal(modal)
+                })
+            })
+
+            closeModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const modal = button.closest('.modal')
+                    closeModal(modal)
+                })
+            })
+
+            function openModal(modal) {
+                if (modal == null) return
+                modal.classList.add('active')
+                overlay.classList.add('active')
+            }
+
+            function closeModal(modal) {
+                if (modal == null) return
+                modal.classList.remove('active')
+                overlay.classList.remove('active')
+            }</script>
+        
+        <script>
+            
+            const elegxosButton = document.getElementById('elegxos-btn')
+            const startButton = document.getElementById('start-btn')
+            const nextButton = document.getElementById('next-btn')
+            const submitButton = document.getElementById('submit-btn')
+            const questionContainerElement = document.getElementById('question-container')
+            const questionElement = document.getElementById('question')
+            const answerButtonsElement = document.getElementById('answer-buttons')
+
+            var corrects;
+
+            let shuffledQuestions, currentQuestionIndex;
+
+            startButton.addEventListener('click', startGame)
+            nextButton.addEventListener('click', () => {
+                answerButtonsElement.style.pointerEvents = "all"
+                currentQuestionIndex++
+                setNextQuestion()
+            })
+
+
+            function startGame() {
+                startButton.classList.add('hide')
+                submitButton.classList.add('hide')
+                shuffledQuestions = questions.sort(() => Math.random() - .5)
+                currentQuestionIndex = 0
+                questionContainerElement.classList.remove('hide')
+                setNextQuestion()
+                corrects = 0;
+                answerButtonsElement.style.pointerEvents = "all"
+            }
+
+            function setNextQuestion() {
+                resetState()
+                showQuestion(shuffledQuestions[currentQuestionIndex])
+            }
+
+            function showQuestion(question) {
+                questionElement.innerText = question.question
+                question.answers.forEach(answer => {
+                    const button = document.createElement('button')
+                    button.innerText = answer.text
+                    button.classList.add('btn')
+                    if (answer.correct) {
+                        button.dataset.correct = answer.correct
+
+                    }
+                    button.addEventListener('click', selectAnswer)
+                    answerButtonsElement.appendChild(button)
+                })
+            }
+
+            function resetState() {
+                clearStatusClass(document.body)
+                nextButton.classList.add('hide')
+                while (answerButtonsElement.firstChild) {
+                    answerButtonsElement.removeChild(answerButtonsElement.firstChild)
+                }
+            }
+
+            function selectAnswer(e) {
+                const selectedButton = e.target
+
+                const correct = selectedButton.dataset.correct
+                setStatusClass(document.body, correct)
+                Array.from(answerButtonsElement.children).forEach(button => {
+                    setStatusClass(button, button.dataset.correct)
+                })
+
+                if (shuffledQuestions.length > currentQuestionIndex + 1) {
+                    nextButton.classList.remove('hide')
+
+
+                } else {
+                    submitButton.classList.remove('hide')
+                    
+
+                    
+                    
+                    
+
+                    document.getElementById("start-btn").style.right = "175px"
+
+                }
+
+                if (selectedButton.dataset = correct) {
+                    corrects++
+                    answerButtonsElement.style.pointerEvents = "none"
+
+                } else {
+
+                    selectedButton.style.backgroundColor = "red"
+                    answerButtonsElement.style.pointerEvents = "none"
+                }
+            }
+            function submit() {
+                console.log(corrects);
+                document.getElementById("corrects").value = corrects
+                
+
+            }
+
+            function setStatusClass(element, correct) {
+                clearStatusClass(element)
+                if (correct) {
+                    element.classList.add('correct')
+
+                } else {
+                    element.classList.add('wrong')
+                }
+            }
+
+            function clearStatusClass(element) {
+                element.classList.remove('correct')
+                element.classList.remove('wrong')
+            }
+
+            const questions = [
+                {
+                    question: 'Ένα ναυτικό μίλι ισούται:',
+                    answers: [
+                        { text: 'A. Με 1609 μέτρα', correct: false },
+                        { text: 'B. Με ένα (1) χιλιόμετρο', correct: false },
+                        { text: 'Γ. Με 1852 μέτρα', correct: true }
+                    ]
+                },
+                {
+                    question: 'Γεωγραφικές συντεταγμένες ενός σημείου είναι:',
+                    answers: [
+                        { text: 'Α. Το γεωγραφικό στίγμα που βρίσκεται το σκάφος τη δεδομένη χρονική στιγμή', correct: false },
+                        { text: 'Β. Το γεωγραφικό πλάτος (φ) και το γεωγραφικό μήκος του (λ)', correct: true },
+                        { text: 'Γ. Η απόσταση που βρίσκεται το σκάφος μας από το λιμένα αναχώρησης του', correct: false }
+                        
+                    ]
+                },
+                {
+                    question: 'Ο <<Γαρμπής>> είναι άνεμος που πνέει από:',
+                    answers: [
+                        { text: 'Α. Νοτιοδυτικά (ΝΔ)', correct: true },
+                        { text: 'Β. Νοτιοανατολικά (ΝΑ)', correct: false },
+                        { text: 'Γ. Ανατολικά (Α)', correct: false }
+                        
+                    ]
+                },
+                {
+                    question: 'Η ασφαλής αγκυροβολία σε βάθος θάλασσας πέντε(5) μέτρων απαιτεί έκταμα (μήκος ) του σχοινιού της άγκυρας τουλάχιστον : ',
+                    answers: [
+                        { text: 'Α. 25 μέτρων', correct: true },
+                        { text: 'Β. 20 μέτρων ', correct: false },
+                        { text: 'Γ. 15 μέτρων ', correct: false }
+                    ]
+                },
+                {
+                    question: 'Ένας εξωλέμβιος κινητήρας πρέπει να περάσει από πρώτο έλεγχο (SERVICE): ',
+                    answers: [
+                        { text: 'Α. Μετά από χρήση έξι (06) μηνών ή μετά τις πρώτες πενήντα (50) ώρες λειτουργίας του, οποιοδήποτε επέλθει πρότερον', correct: false },
+                        { text: 'Β. Μετά από χρήση τριών (03) μηνών ή μετά τις πρώτες πενήντα (50) ώρες λειτουργίας του, οποιοδήποτε επέλθει πρότερον ', correct: false },
+                        { text: 'Γ. Μετά από χρήση τριών (03) μηνών ή μετά τις πρώτες είκοσι (20) ώρες λειτουργίας του, οποιοδήποτε επέλθει πρότερον', correct: true }
+                    ]
+                },
+                {
+                    question: 'Η ασφαλής αγκυροβολία σε βάθος θάλασσας πέντε(5) μέτρων απαιτεί έκταμα (μήκος ) του σχοινιού της άγκυρας τουλάχιστον : ',
+                    answers: [
+                        { text: 'Α. 25 μέτρων', correct: true },
+                        { text: 'Β. 20 μέτρων ', correct: false },
+                        { text: 'Γ. 15 μέτρων ', correct: false }
+                    ]
+                },
+                {
+                    question: 'Το <<μπούκωμα>> του κινητήρα (αργή κίνηση του σκάφους ενώ ο κινητήρας δουλεύει στο <φουλ> ) μπορεί να οφείλεται : ',
+                    answers: [
+                        { text: 'Α. Στον έντονο κυματισμό ', correct: false },
+                        { text: 'Β. Σε μπέρδεμα της προπέλας σε φύκια, σχοινιά κ.λπ. ', correct: true },
+                        { text: 'Γ. Σε ελλιπή τροφοδοσία καυσίμου ', correct: false }
+                    ]
+                },
+                {
+                    question: 'Όταν οδηγούμε το σκάφος μας πίσω από σκάφη που έλκουν (σύρουν) σκιέρς: ',
+                    answers: [
+                        { text: 'Α. Το οδηγούμε πάνω στα απόνερα των σκιέρς για να αποφεύγουμε τους κλυδωνισμούς ', correct: false },
+                        { text: 'Β. Διατηρούμε απόσταση ασφαλείας τόσον από τους σκιέρς όσον και από τα σκάφη που προπορεύονται ', correct: true },
+                        { text: 'Γ. Καταβάλλουμε κάθε προσπάθεια να προσπεράσουμε τους σκιέρς ', correct: false }
+                    ]
+                },
+                {
+                    question: 'Αν κατά τη διάρκεια του ταξιδιού (πλου) ο καιρός επιδεινωθεί ο χειριστής: ',
+                    answers: [
+                        { text: 'Α. Εφόσον απαιτείται ελαττώνει ταχύτητα έτσι ώστε το σκάφος να πλέει ασφαλώς και να μην μπαίνουν νερά σε αυτό ', correct: true },
+                        { text: 'Β. Συνεχίζει το ταξίδι (πλου) προς τον προορισμό του ', correct: false },
+                        { text: 'Γ. Αυξάνει στο μέγιστο την ταχύτητα του σκάφους για να επιστρέψει το ταχύτερο στο λιμένα ', correct: false }
+                    ]
+                },
+                {
+                    question: 'Αν κατά τη διάρκεια της νύχτας παρουσιασθεί κάποιο πρόβλημα και το σκάφος περιέλθει σε κατάσταση ανάγκης ή κινδύνου, συνεγείρουμε τα παραπλέοντα πλοία ή τους ευρισκόμενους στην ξηρά: ',
+                    answers: [
+                        { text: 'Α. Χρησιμοποιώντας τα σήματα κινδύνου (καπνογόνα ) ', correct: false },
+                        { text: 'Β. Ανάβοντας ένα λευκό φως ', correct: false },
+                        { text: 'Γ. Χρησιμοποιώντας τα σήματα κινδύνου (βεγγαλικά) ', correct: true }
+                    ]
+                },
+                {
+                    question: 'Οι ιδιοκτήτες /χειριστές ταχυπλόων σκαφών: ',
+                    answers: [
+                        { text: 'Α. Να έχουν πρόσφορα και για άμεση χρήση όλα τα εφόδια και να μην έχει περάσει η ημερομηνία λήξης τους ', correct: true },
+                        { text: 'Β. Να έχουν πρόσφορα και για άμεση χρήση όλα τα εφόδια αδιαφορώντας για το αν έχει περάσει η ημερομηνία λήξης τους ', correct: false },
+                        { text: 'Γ. Να διατηρούν τα εφόδια σε καλή κατάσταση, να μην έχει περάσει η ημερομηνία λήξης τους και να βρίσκονται στο κατά το δυνατόν ασφαλέστερο σημείο του σπιτιού τους', correct: false }
+                    ]
+                },
+                {
+                    question: 'Η κυκλοφορία των θαλασσίων μοτοποδηλάτων και των HOVERCRAFTS, απαγορεύεται: ',
+                    answers: [
+                        { text: 'Α. Σε απόσταση μικρότερη των εκατό (100) μέτρων από τους λουόμενους ', correct: true },
+                        { text: 'Β. Σε απόσταση μικρότερη των διακοσίων (200) μέτρων από το εξωτερικό μέρος των πλωτών σημαντήρων που επισημαίνουν τα όρια μέχρι τα οποία φθάνουν συνήθως κολυμπώντας οι λουόμενοι στις λουτρικές εγκαταστάσεις, σε απόσταση μικρότερη των τριακοσίων (300) μέτρων από το συνηθισμένο σημείο στο οποίο φθάνουν κολυμπώντας οι λουόμενοι στις θαλάσσιες περιοχές που δεν επισημαίνονται με πλωτούς σημαντήρες και με ταχύτητα μεγαλύτερη των πέντε (05) κόμβων σε απόσταση μικρότερη των πεντακοσίων (500) μέτρων από την ακτογραμμή στις περιοχές που δεν υπάρχουν λουόμενοι', correct: false },
+                        { text: 'Γ. Σε απόσταση μικρότερη των εκατό (100) μέτρων από το εξωτερικό μέρος των πλωτών σημαντήρων που επισημαίνουν τα όρια μέχρι τα οποία φθάνουν συνήθως κολυμπώντας οι λουόμενοι στις λουτρικές εγκαταστάσεις, σε απόσταση μικρότερη των διακοσίων (200) μέτρων από το συνηθισμένο σημείο στο οποίο φθάνουν κολυμπώντας οι λουόμενοι στις θαλάσσιες περιοχές που δεν επισημαίνονται με πλωτούς σημαντήρες και με ταχύτητα μεγαλύτερη των πέντε (05) κόμβων σε απόσταση μικρότερη των διακοσίων (200) μέτρων από την ακτογραμμή στις περιοχές που δεν υπάρχουν λουόμενοι', correct: false }
+                    ]
+                },
+            ]
+            function epistrofi(){
+                location.href="/index.html"
+            }
+            
+        </script>
+        
+            
+        
+    </body>
+
+    
+
+
+    
+
+    
+
+</html>
