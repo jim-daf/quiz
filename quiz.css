@@ -102,11 +102,7 @@ body.wrong {
     transition: 0.3s; 
     cursor: pointer;
 }
-@media(hover: hover) and (pointer: fine) {
-     .btn:hover {
-        background: yellow;
-    }
-}
+
 
 #question{
   display: flex;
