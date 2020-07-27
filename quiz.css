@@ -23,6 +23,7 @@ body {
   align-items: center;
   background: url("beach2.jpg") no-repeat center center fixed;
   background-size: cover;
+  
 }
 
 body.correct {
@@ -40,7 +41,9 @@ body.wrong {
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0 0 10px 2px;
-  max-height:100%;
+  max-height: 100%;
+  
+
 }
 
 .btn-grid {
@@ -62,9 +65,11 @@ body.wrong {
 
 
 
+
 .btn.correct{
   transition: 0.3s;
   background-color: green;
+  
 }
 
 
@@ -110,11 +115,12 @@ body.wrong {
 }
 
 #goback{
-  position: relative;
+  position: absolute;
   color: white;
   background-color:hsl(var(--hue), 50%, 35%); 
-  left: 235px;
-  bottom: 72px;
+  top: 60%;
+  margin-left:61%;
+  position: fixed;
   font-size: 1.0rem;
   padding: 5px 15px;
   cursor: pointer;
