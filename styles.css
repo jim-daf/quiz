@@ -79,18 +79,23 @@
 
 #synolo{
     color: rgb(24, 16, 16);
-    position: relative;
-    left: 213px;
-    bottom: 76px;
+    position: absolute;
+    left: 56%;
+    bottom:43.8%;
+
+    position: fixed;
     font-size: 19px;
 }
 
 #corrects{
-    color: rgb(24, 16, 16);
+  color: rgb(24, 16, 16);
   width: 14px;
   font-size: 19.4px;
   border: none;
-  position: relative;
-  left: 198px;
-  bottom: 34px;
+  
+  
+  position: absolute;
+  bottom: 61.8%;
+  left: 52%;
+  position: fixed;
 }
