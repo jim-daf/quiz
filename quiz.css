@@ -60,9 +60,7 @@ body.wrong {
   outline: none;
 }
 
-.btn:hover {
-  border-color: black;
-}
+
 
 .btn.correct{
   transition: 0.3s;
@@ -97,7 +95,7 @@ body.wrong {
     padding: 5px 15px;
 }
 
-.start-btn:hover, .next-btn:hover, .submit-btn:hover, #goback ,.btn:hover {
+.start-btn:hover, .next-btn:hover, .submit-btn:hover, #goback  {
     background-color: rgb(52, 111, 167);
     transition: 0.3s; 
     cursor: pointer;
