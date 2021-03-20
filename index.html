@@ -13,9 +13,8 @@
 
   <body>
     <script src="sweetalert2.all.min.js"></script>
-    <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
-
+    
     <div class="container" id="container" style="overflow: auto;">
       <div id="question-container" class="hide">
         <div id="question">Question</div>
@@ -52,9 +51,7 @@
       var corrects;
       // Get the modal
 
-      // Get the modal
-
-      const elegxosButton = document.getElementById("elegxos-btn");
+      
       const startButton = document.getElementById("start-btn");
       const nextButton = document.getElementById("next-btn");
       const submitButton = document.getElementById("submit-btn");
@@ -64,7 +61,8 @@
       const questionElement = document.getElementById("question");
       const answerButtonsElement = document.getElementById("answer-buttons");
       const back = document.getElementById("back-link");
-
+      
+      // return to homepage
       back.addEventListener("click", function () {
         location.href = "http://www.bethecaptain.gr";
       });
@@ -117,7 +115,7 @@
           answerButtonsElement.removeChild(answerButtonsElement.firstChild);
         }
       }
-
+      
       function selectAnswer(e) {
         const selectedButton = e.target;
 
@@ -162,6 +160,7 @@
         element.classList.remove("correct");
         element.classList.remove("wrong");
       }
+      // Popup alert after submission
       document.getElementById("submit-btn").addEventListener("click", () => {
         swal
           .fire({
@@ -217,7 +216,7 @@
             }
           });
       });
-
+      // dataset of questions
       const questions = [
         {
           question: "1) Ένα ναυτικό μίλι ισούται: ",
